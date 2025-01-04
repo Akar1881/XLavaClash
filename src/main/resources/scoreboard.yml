@@ -1,0 +1,28 @@
+# XLavaClash Scoreboard Configuration
+
+# Title of the scoreboard (supports color codes with &)
+title: "&6&lYour Server Name"
+
+# Lines to display (supports color codes with &)
+# Available placeholders:
+# %xlc_onlines% - Total players in lobby, games, and queues
+# %player_rank% - Player's current rank
+# %player_xp% - Player's current XP
+# %require_xp% - XP required for next rank
+# %player_wins% - Player's total wins
+# %player_loses% - Player's total losses
+lines:
+  - "&fPlayers: &a%xlc_onlines%"
+  - ""
+  - "&7=================="
+  - "&fYour Rank: &6%player_rank%"
+  - "&fNext Rank In: &e%player_xp% &7/ &e%require_xp%"
+  - "&7=================="
+  - "&fYour Statistics:"
+  - "&fYour Wins: &a%player_wins%"
+  - "&fYour Loses: &c%player_loses%"
+  - "&7=================="
+  - "&eyourserver.com"
+
+# Update interval in ticks (20 ticks = 1 second)
+update-interval: 20

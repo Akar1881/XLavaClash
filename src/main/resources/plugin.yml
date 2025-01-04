@@ -1,0 +1,17 @@
+name: XLavaClash
+version: '1.0'
+main: com.xlavaclash.XLavaClash
+api-version: '1.17'
+depend: [WorldEdit]
+commands:
+  xlc:
+    description: Main command for XLavaClash plugin
+    usage: /<command> [subcommand] [args...]
+    aliases: [lavaclash]
+permissions:
+  xlavaclash.admin:
+    description: Allows access to all admin commands
+    default: op
+  xlavaclash.play:
+    description: Allows players to join games
+    default: true

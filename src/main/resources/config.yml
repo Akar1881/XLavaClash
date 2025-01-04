@@ -1,0 +1,33 @@
+# XLavaClash Configuration
+
+# Global lobby location
+lobby:
+  world: ''
+  x: 0
+  y: 0
+  z: 0
+  yaw: 0
+  pitch: 0
+
+# Button cooldown in milliseconds (default: 1000ms = 1 second)
+button-cooldown: 1000
+
+# Minimum players needed to start a game
+min-players: 2
+
+# Maximum time (in seconds) for a game
+max-game-time: 600
+
+# Time (in seconds) for the pre-game countdown
+countdown-time: 30
+
+# Time (in seconds) between item spawns
+item-spawn-interval: 30
+
+# Messages
+messages:
+  game-start: "&aThe game has started!"
+  game-end: "&eGame Over! %winner% team wins!"
+  player-join: "&7%player% has joined the game!"
+  player-leave: "&7%player% has left the game!"
+  button-cooldown: "&cYou must wait %time% seconds before using the button again!"
