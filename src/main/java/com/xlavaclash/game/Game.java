@@ -26,10 +26,48 @@ public class Game {
         this.state = GameState.WAITING;
         this.startTime = System.currentTimeMillis();
         this.gameTimer = new GameTimer(plugin, this);
+    }
+
+    public void endGame(Team winner) {
+        state = GameState.ENDING;
+        gameTimer.stop();
+        broadcast("§6" + winner.name() + " §eTeam wins the game!");
         
-        // Initialize XP tracking for all players
-        players.values().forEach(gamePlayer -> 
-            plugin.getXpManager().initializeGameStats(gamePlayer.getPlayer()));
+        // Calculate survival time and award XP for all players
+        long gameEndTime = System.currentTimeMillis();
+        players.values().forEach(gamePlayer -> {
+            Player player = gamePlayer.getPlayer();
+            long survivalTime = (gameEndTime - startTime) / 1000; // Convert to seconds
+            
+            // Award win/loss XP
+            if (gamePlayer.getTeam() == winner) {
+                plugin.getXpManager().addWin(player);
+            } else {
+                plugin.getXpManager().addLoss(player);
+            }
+            
+            // Set survival time and calculate final XP
+            plugin.getXpManager().setSurvivalTime(player, survivalTime);
+            plugin.getXpManager().calculateAndAwardXp(player);
+        });
+        
+        // Clear all players from queue
+        plugin.getQueueManager().removeAllPlayers();
+        
+        // Save all data
+        plugin.getXpManager().saveData();
+        
+        // Teleport players to lobby
+        Location globalLobby = plugin.getConfigManager().getLobbyLocation();
+        if (globalLobby != null) {
+            players.values().forEach(gamePlayer -> {
+                Player player = gamePlayer.getPlayer();
+                PlayerUtils.resetPlayer(player);
+                player.teleport(globalLobby);
+            });
+        }
+        
+        players.clear();
     }
 
     public void addPlayer(Player player, Team team) {
@@ -74,36 +112,6 @@ public class Game {
         if (lobby != null) {
             player.teleport(lobby);
         }
-    }
-
-    public void endGame(Team winner) {
-        state = GameState.ENDING;
-        gameTimer.stop();
-        broadcast("§6" + winner.name() + " §eTeam wins the game!");
-        
-        // Calculate survival time and award XP for all players
-        long gameEndTime = System.currentTimeMillis();
-        players.values().forEach(gamePlayer -> {
-            Player player = gamePlayer.getPlayer();
-            long survivalTime = (gameEndTime - startTime) / 1000; // Convert to seconds
-            plugin.getXpManager().setSurvivalTime(player, survivalTime);
-            plugin.getXpManager().calculateAndAwardXp(player);
-        });
-        
-        // Clear all players from queue
-        plugin.getQueueManager().removeAllPlayers();
-        
-        // Teleport players to lobby
-        Location globalLobby = plugin.getConfigManager().getLobbyLocation();
-        if (globalLobby != null) {
-            players.values().forEach(gamePlayer -> {
-                Player player = gamePlayer.getPlayer();
-                PlayerUtils.resetPlayer(player);
-                player.teleport(globalLobby);
-            });
-        }
-        
-        players.clear();
     }
 
     public void broadcast(String message) {

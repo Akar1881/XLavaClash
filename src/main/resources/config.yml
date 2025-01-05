@@ -9,6 +9,19 @@ lobby:
   yaw: 0
   pitch: 0
 
+# The size must be a multiple of 9 (9, 18, 27, 36, 45, 54)
+# Start slot must be less than end slot
+# The map items will be placed in the inventory between the start and end slot
+# Both slots must be within the inventory size
+# The plugin will validate and adjust values if needed
+
+# GUI Settings
+gui:
+  map-selection:
+    size: 27  # Size of the inventory (must be multiple of 9)
+    start-slot: 9  # Starting slot for map items
+    end-slot: 17   # Ending slot for map items
+
 # Button cooldown in milliseconds (default: 1000ms = 1 second)
 button-cooldown: 1000
 

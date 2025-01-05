@@ -16,20 +16,28 @@ import java.util.List;
 public class MapSelectionGui {
     private final XLavaClash plugin;
     private final Inventory inventory;
+    private final int startSlot;
+    private final int endSlot;
 
     public MapSelectionGui(XLavaClash plugin) {
         this.plugin = plugin;
-        this.inventory = Bukkit.createInventory(null, 27, "§8Select a Map");
+        int size = plugin.getConfig().getInt("gui.map-selection.size", 27);
+        this.startSlot = plugin.getConfig().getInt("gui.map-selection.start-slot", 9);
+        this.endSlot = plugin.getConfig().getInt("gui.map-selection.end-slot", 17);
+        
+        // Ensure size is multiple of 9
+        size = Math.max(9, (size / 9) * 9);
+        this.inventory = Bukkit.createInventory(null, size, "§8Select a Map");
         setupItems();
     }
 
     private void setupItems() {
         GuiUtils.fillEmptySlots(inventory);
 
-        int slot = 9; // Start at slot 9
+        int slot = startSlot;
         
         for (GameMap map : plugin.getMapManager().getActiveMaps().values()) {
-            if (slot > 17) break; // Only use slots 9-17
+            if (slot > endSlot) break;
 
             ItemStack item = new ItemStack(Material.MAP);
             ItemMeta meta = item.getItemMeta();
@@ -67,5 +75,13 @@ public class MapSelectionGui {
 
     public void open(Player player) {
         player.openInventory(inventory);
+    }
+
+    public static int getStartSlot(XLavaClash plugin) {
+        return plugin.getConfig().getInt("gui.map-selection.start-slot", 9);
+    }
+
+    public static int getEndSlot(XLavaClash plugin) {
+        return plugin.getConfig().getInt("gui.map-selection.end-slot", 17);
     }
 }

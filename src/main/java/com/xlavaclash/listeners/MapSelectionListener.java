@@ -25,13 +25,16 @@ public class MapSelectionListener implements Listener {
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || clicked.getType() == Material.BLACK_STAINED_GLASS_PANE) return;
 
-        // Only handle slots 9-17
+        int startSlot = plugin.getConfig().getInt("gui.map-selection.start-slot", 9);
+        int endSlot = plugin.getConfig().getInt("gui.map-selection.end-slot", 17);
+        
+        // Only handle configured slot range
         int slot = event.getSlot();
-        if (slot < 9 || slot > 17) return;
+        if (slot < startSlot || slot > endSlot) return;
 
         Player player = (Player) event.getWhoClicked();
         String mapName = plugin.getMapManager().getActiveMaps().keySet().stream()
-            .skip(slot - 9)
+            .skip(slot - startSlot)
             .findFirst()
             .orElse(null);
 
